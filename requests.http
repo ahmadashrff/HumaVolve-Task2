@@ -1,0 +1,29 @@
+@host = http://localhost:5080
+
+### 1) صفحة أولى
+GET {{host}}/api/products?page=1&pageSize=5
+
+### 2) بحث (StartsWith)
+GET {{host}}/api/products?search=Lap
+
+### 3) منتج واحد (خد منه rowVersion)
+GET {{host}}/api/products/1
+
+### 4) تعديل: حط rowVersion اللي جت من الـ GET
+PUT {{host}}/api/products/1
+Content-Type: application/json
+
+{
+  "name": "Laptop Pro",
+  "price": 999.99,
+  "categoryId": 1,
+  "rowVersion": "PUT_ROWVERSION_HERE"
+}
+
+### 5) أعد نفس الطلب (4) بنفس rowVersion القديمة: لازم يرجع 409 Conflict
+
+### 6) Soft delete
+DELETE {{host}}/api/products/2
+
+### 7) المنتج بعد الحذف: 404 ومش بيظهر في القايمة
+GET {{host}}/api/products/2
